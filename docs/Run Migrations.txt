@@ -1,0 +1,3 @@
+dotnet ef database update --project MotorbikeRental.Infrastructure --startup-project MotorbikeRental.API
+
+dotnet ef migrations add TenMigration --project MotorbikeRental.Infrastructure --startup-project MotorbikeRental.API

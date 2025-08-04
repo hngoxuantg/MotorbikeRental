@@ -1,0 +1,54 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MotorbikeRental.API", "MotorbikeRental.API\MotorbikeRental.API.csproj", "{AF017EB7-2525-BE54-5111-75D572CF4981}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MotorbikeRental.Application", "MotorbikeRental.Application\MotorbikeRental.Application.csproj", "{968720B8-9FD3-F0CB-C8C0-37A0E8221763}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MotorbikeRental.Domain", "MotorbikeRental.Domain\MotorbikeRental.Domain.csproj", "{81CA978E-155B-425B-4FD5-2F0BB7252713}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MotorbikeRental.Infrastructure", "MotorbikeRental.Infrastructure\MotorbikeRental.Infrastructure.csproj", "{4AB54CB4-9CB3-A477-C4DE-EEC8BFFA209A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MotorbikeRental.UnitTest", "MotorbikeRental.UnitTest\MotorbikeRental.UnitTest.csproj", "{B017386D-3EA8-4579-958E-07F895F6A2FB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MotorbikeRental.Common", "MotorbikeRental.Common\MotorbikeRental.Common.csproj", "{DCE82F16-04BA-43E3-B6F4-2013C97FCF19}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AF017EB7-2525-BE54-5111-75D572CF4981}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF017EB7-2525-BE54-5111-75D572CF4981}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF017EB7-2525-BE54-5111-75D572CF4981}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF017EB7-2525-BE54-5111-75D572CF4981}.Release|Any CPU.Build.0 = Release|Any CPU
+		{968720B8-9FD3-F0CB-C8C0-37A0E8221763}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{968720B8-9FD3-F0CB-C8C0-37A0E8221763}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{968720B8-9FD3-F0CB-C8C0-37A0E8221763}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{968720B8-9FD3-F0CB-C8C0-37A0E8221763}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81CA978E-155B-425B-4FD5-2F0BB7252713}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81CA978E-155B-425B-4FD5-2F0BB7252713}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81CA978E-155B-425B-4FD5-2F0BB7252713}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81CA978E-155B-425B-4FD5-2F0BB7252713}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4AB54CB4-9CB3-A477-C4DE-EEC8BFFA209A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4AB54CB4-9CB3-A477-C4DE-EEC8BFFA209A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4AB54CB4-9CB3-A477-C4DE-EEC8BFFA209A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4AB54CB4-9CB3-A477-C4DE-EEC8BFFA209A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B017386D-3EA8-4579-958E-07F895F6A2FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B017386D-3EA8-4579-958E-07F895F6A2FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B017386D-3EA8-4579-958E-07F895F6A2FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B017386D-3EA8-4579-958E-07F895F6A2FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DCE82F16-04BA-43E3-B6F4-2013C97FCF19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCE82F16-04BA-43E3-B6F4-2013C97FCF19}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DCE82F16-04BA-43E3-B6F4-2013C97FCF19}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DCE82F16-04BA-43E3-B6F4-2013C97FCF19}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FB2A1FC0-4A46-4CA6-8FB8-9E5AD765AFD5}
+	EndGlobalSection
+EndGlobal
