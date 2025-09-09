@@ -45,7 +45,7 @@ MotorbikeRental/
 
 Áp dụng đầy đủ nguyên lý **SOLID** và tuân thủ **Dependency Inversion Principle**.
 
-### Frontend – Vue 3 + TypeScript
+### Frontend – Vue 3
 
 ```
 MotorbikeRental.UI/
