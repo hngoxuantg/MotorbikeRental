@@ -45,7 +45,7 @@ MotorbikeRental/
 
 Áp dụng đầy đủ nguyên lý **SOLID** và tuân thủ **Dependency Inversion Principle**.
 
-### Frontend – Vue 3 + TypeScript
+### Frontend – Vue 3
 
 ```
 MotorbikeRental.UI/
@@ -74,7 +74,7 @@ Frontend đảm nhiệm giao diện người dùng, gọi API qua Axios, sử d�
 
 ### Frontend
 - Vue 3 (Composition API)
-- TypeScript + Vite
+- Javascript + Vite
 - Pinia, Vue Router
 - Axios
 
