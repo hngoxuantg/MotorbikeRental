@@ -73,9 +73,16 @@ builder.Services.AddSwaggerGen(options =>
 
 var app = builder.Build();
 
+
+#region Database Initialization
 using var scope = app.Services.CreateScope();
+
+var db = scope.ServiceProvider.GetRequiredService<MotorbikeRentalDbContext>();
+db.Database.Migrate();
+
 var seedingService = scope.ServiceProvider.GetRequiredService<IDataSeedingService>();
-await seedingService.SeedData();
+await seedingService.SeedDataAsync();
+#endregion
 
 if (app.Environment.IsDevelopment())
 {
