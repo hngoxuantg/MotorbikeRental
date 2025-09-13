@@ -78,7 +78,7 @@ var app = builder.Build();
 using var scope = app.Services.CreateScope();
 
 var db = scope.ServiceProvider.GetRequiredService<MotorbikeRentalDbContext>();
-db.Database.Migrate();
+await db.Database.MigrateAsync();
 
 var seedingService = scope.ServiceProvider.GetRequiredService<IDataSeedingService>();
 await seedingService.SeedDataAsync();
