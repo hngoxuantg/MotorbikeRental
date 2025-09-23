@@ -16,6 +16,16 @@ services:
     networks:
       - motorbike-network
 
+  motorbike-frontend:
+    build: ../frontend/MotorbikeRental.UI
+    container_name: motorbike-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - motorbike-api
+    networks:
+      - motorbike-network
+
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: motorbike-sqlserver
