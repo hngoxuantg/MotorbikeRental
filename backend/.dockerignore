@@ -1,0 +1,16 @@
+**/bin/
+**/obj/
+**/.vs/
+**/.vscode/
+**/TestResults/
+**/*.user
+**/.git/
+**/node_modules/
+**/.env
+**/coverage/
+**/Dockerfile*
+**/docker-compose*
+**/.dockerignore
+**/.gitignore
+**/README.md
+**/LICENSE

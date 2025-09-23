@@ -30,14 +30,17 @@ namespace MotorbikeRental.Application.Services.AuthServices
                 new Claim(ClaimTypes.Name, userCredentialsDto.FullName),
                 new Claim(ClaimTypes.Role, userCredentialsDto.RoleName)
             };
+
             SecurityTokenDescriptor securityTokenDescriptor = new SecurityTokenDescriptor()
             {
                 Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.UtcNow.AddMinutes(Convert.ToDouble(appSettings.JwtConfig.TokenExpirationMinutes)),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
+
             SecurityToken token = jwtTokenHandler.CreateToken(securityTokenDescriptor);
             string jwtToken = jwtTokenHandler.WriteToken(token);
+
             return jwtToken;
         }
     }

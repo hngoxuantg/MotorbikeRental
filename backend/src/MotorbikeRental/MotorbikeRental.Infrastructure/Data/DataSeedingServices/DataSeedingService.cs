@@ -24,7 +24,7 @@ namespace MotorbikeRental.Infrastructure.Data.DataSeedingServices
             this.roleManager = roleManager;
             this.userManager = userManager;
         }
-        public async Task SeedData()
+        public async Task SeedDataAsync()
         {
             if (!dbContext.Roles.Any())
             {

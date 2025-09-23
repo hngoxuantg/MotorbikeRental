@@ -17,6 +17,7 @@ namespace MotorbikeRental.Application.Validators.VehicleValidators
         {
             if (await unitOfWork.CategoryRepository.IsExists(nameof(Category.CategoryName), categoryCreateDto.CategoryName, cancellationToken))
                 throw new ValidatorException("Category name already exists");
+
             return true;
         }
 
@@ -24,6 +25,7 @@ namespace MotorbikeRental.Application.Validators.VehicleValidators
         {
             if (await unitOfWork.MotorbikeRepository.IsExists(nameof(Motorbike.CategoryId), category.CategoryId, cancellationToken))
                 throw new ValidatorException("Cannot delete category because it is associated with existing motorbikes");
+
             return true;
         }
 
@@ -31,6 +33,7 @@ namespace MotorbikeRental.Application.Validators.VehicleValidators
         {
             if (!await unitOfWork.CategoryRepository.IsExists(nameof(Category.CategoryId), id, cancellationToken))
                 throw new ValidatorException("Category ID not found");
+
             return true;
         }
 
@@ -38,8 +41,10 @@ namespace MotorbikeRental.Application.Validators.VehicleValidators
         {
             if (!await unitOfWork.CategoryRepository.IsExists(nameof(Category.CategoryId), categoryUpdateDto.CategoryId, cancellationToken))
                 throw new ValidatorException($"Entity with ID: {categoryUpdateDto.CategoryId} not found");
+
             if (await unitOfWork.CategoryRepository.IsExistsForUpdate(categoryUpdateDto.CategoryId, nameof(Category.CategoryName), categoryUpdateDto.CategoryName, nameof(Category.CategoryId)))
                 throw new ValidatorException($"Category name already exists");
+
             return true;
         }
     }

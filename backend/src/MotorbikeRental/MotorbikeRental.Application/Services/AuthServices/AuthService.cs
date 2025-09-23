@@ -22,14 +22,18 @@ namespace MotorbikeRental.Application.Services.AuthServices
         public async Task<UserCredentialsDto> Login(LoginDto loginDto, CancellationToken cancellationToken = default)
         {
             UserCredentials? userCredentials = await unitOfWork.UserCredentialsRepository.GetByUserNameInCludes(loginDto.UserName, cancellationToken) ?? throw new NotFoundException($"UserCredentials with username {loginDto.UserName} not found");
+
             if (userCredentials?.Employee.Status != 0)
                 throw new NotFoundException($"Employee with id {userCredentials?.EmployeeId} is not active");
+
             if (await userManager.CheckPasswordAsync(userCredentials, loginDto.Password))
             {
                 userCredentials.LastLogin = DateTime.UtcNow;
                 await unitOfWork.UserCredentialsRepository.Update(userCredentials, cancellationToken);
+
                 return mapper.Map<UserCredentialsDto>(userCredentials);
             }
+
             return null;
         }
     }

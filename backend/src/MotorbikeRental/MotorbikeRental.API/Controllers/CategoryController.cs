@@ -25,6 +25,7 @@ namespace MotorbikeRental.API.Controllers
         public async Task<IActionResult> GetCategories(CancellationToken cancellationToken)
         {
             IEnumerable<CategoryDto> result;
+
             if (memoryCache.TryGetValue("Categories", out IEnumerable<CategoryDto> categories))
             {
                 result = categories;
@@ -35,12 +36,14 @@ namespace MotorbikeRental.API.Controllers
                 if (result != null)
                     memoryCache.Set("Categories", result, TimeSpan.FromMinutes(10));
             }
+
             var response = new ResponseDto<IEnumerable<CategoryDto>>
             {
                 Success = true,
                 Message = "Categories retrieved successfully",
                 Data = result
             };
+
             return Ok(response);
         }
         [HttpPost]
@@ -48,18 +51,21 @@ namespace MotorbikeRental.API.Controllers
         {
             var result = await categoryService.CreateCategory(categoryCreateDto, cancellationToken);
             memoryCache.Remove("Categories");
+
             var responseDto = new ResponseDto<CategoryDto>
             {
                 Success = true,
                 Message = "Category created successfully",
                 Data = result
             };
+
             return CreatedAtAction(nameof(GetCategoryById), new { id = result.CategoryId }, responseDto);
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCategoryById(int id, CancellationToken cancellationToken = default)
         {
             var result = new CategoryDto();
+
             if (memoryCache.TryGetValue($"Category_{id}", out CategoryDto categoryDto))
             {
                 result = categoryDto;
@@ -70,6 +76,7 @@ namespace MotorbikeRental.API.Controllers
                 if (result != null)
                     memoryCache.Set($"Category_{id}", result, TimeSpan.FromMinutes(10));
             }
+
             var response = new ResponseDto<CategoryDto>
             {
                 Success = true,
@@ -85,27 +92,33 @@ namespace MotorbikeRental.API.Controllers
                 return BadRequest("Category ID mismatch");
 
             var result = await categoryService.UpdateCategory(categoryUpdateDto, cancellationToken);
+
             memoryCache.Remove("Categories");
             memoryCache.Remove($"Category_{id}");
+
             var responseDto = new ResponseDto<CategoryDto>
             {
                 Success = true,
                 Message = "Category updated successfully",
                 Data = result
             };
+
             return Ok(responseDto);
         }
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCategory(int id, CancellationToken cancellationToken = default)
         {
             var result = await categoryService.DeleteCategory(id, cancellationToken);
+
             memoryCache.Remove("Categories");
             memoryCache.Remove($"Category_{id}");
+
             var responseDto = new ResponseDto
             {
                 Success = true,
                 Message = "Category deleted successfully"
             };
+
             return Ok(responseDto);
         }
     }

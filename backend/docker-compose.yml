@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  motorbike-api:
+    build: .
+    container_name: motorbike-api
+    ports:
+      - "8080:8080"
+    depends_on:
+      - sqlserver
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__PrimaryDbConnection=Server=sqlserver,1433;Database=MotorbikeRentalDB;User Id=sa;Password=YourStrong@Passw0rd;TrustServerCertificate=true;Encrypt=false;
+    volumes:
+      - uploaded_files:/app/wwwroot/uploads
+    networks:
+      - motorbike-network
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: motorbike-sqlserver
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=YourStrong@Passw0rd
+      - MSSQL_PID=Express
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+    networks:
+      - motorbike-network
+
+networks:
+  motorbike-network:
+    driver: bridge
+
+volumes:
+  sqlserver_data:
+  uploaded_files:

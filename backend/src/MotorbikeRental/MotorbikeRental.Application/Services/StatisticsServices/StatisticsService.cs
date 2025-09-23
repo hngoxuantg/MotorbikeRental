@@ -22,6 +22,7 @@ namespace MotorbikeRental.Application.Services.StatisticsServices
         public async Task<OverviewStatisticsDto> GetOverview(CancellationToken cancellationToken = default)
         {
             DateTime systemStartDate = await unitOfWork.StatisticsRepository.GetSystemStartDate(cancellationToken);
+
             return new OverviewStatisticsDto
             {
                 TotalMotorbikes = await unitOfWork.StatisticsRepository.GetTotalCount<Motorbike>(null, cancellationToken),
@@ -53,11 +54,26 @@ namespace MotorbikeRental.Application.Services.StatisticsServices
             return new ContractStatusStatisticsDto
             {
                 TotalContracts = await unitOfWork.StatisticsRepository.GetTotalCount<RentalContract>(null, cancellationToken),
-                TotalActiveContracts = await unitOfWork.StatisticsRepository.GetTotalCount<RentalContract>(c => c.RentalContractStatus == RentalContractStatus.Active, cancellationToken),
-                TotalCompletedContracts = await unitOfWork.StatisticsRepository.GetTotalCount<RentalContract>(c => c.RentalContractStatus == RentalContractStatus.Completed, cancellationToken),
-                TotalCancelledContracts = await unitOfWork.StatisticsRepository.GetTotalCount<RentalContract>(c => c.RentalContractStatus == RentalContractStatus.Cancelled, cancellationToken),
-                TotalPendingContracts = await unitOfWork.StatisticsRepository.GetTotalCount<RentalContract>(c => c.RentalContractStatus == RentalContractStatus.Pending, cancellationToken),
-                TotalProcessingContracts = await unitOfWork.StatisticsRepository.GetTotalCount<RentalContract>(c => c.RentalContractStatus == RentalContractStatus.ProcessingIncident, cancellationToken)
+
+                TotalActiveContracts = await unitOfWork.StatisticsRepository.GetTotalCount<RentalContract>(
+                    c => c.RentalContractStatus == RentalContractStatus.Active, 
+                    cancellationToken),
+
+                TotalCompletedContracts = await unitOfWork.StatisticsRepository.GetTotalCount<RentalContract>(
+                    c => c.RentalContractStatus == RentalContractStatus.Completed, 
+                    cancellationToken),
+
+                TotalCancelledContracts = await unitOfWork.StatisticsRepository.GetTotalCount<RentalContract>(
+                    c => c.RentalContractStatus == RentalContractStatus.Cancelled, 
+                    cancellationToken),
+
+                TotalPendingContracts = await unitOfWork.StatisticsRepository.GetTotalCount<RentalContract>(
+                    c => c.RentalContractStatus == RentalContractStatus.Pending, 
+                    cancellationToken),
+
+                TotalProcessingContracts = await unitOfWork.StatisticsRepository.GetTotalCount<RentalContract>(
+                    c => c.RentalContractStatus == RentalContractStatus.ProcessingIncident, 
+                    cancellationToken)
             };
         }
         public async Task<IncidentStatisticsDto> GetIncidentStatistics(CancellationToken cancellationToken = default)
@@ -72,11 +88,17 @@ namespace MotorbikeRental.Application.Services.StatisticsServices
         public async Task<RevenueStatisticsDto> GetRevenueByDateRange(StatisticsFilterDto filter, CancellationToken cancellation = default)
         {
             DateTime systemStar = await unitOfWork.StatisticsRepository.GetSystemStartDate(cancellation);
+
             if (filter.FromDate < systemStar || !filter.FromDate.HasValue)
                 filter.FromDate = systemStar;
             if (!filter.ToDate.HasValue || filter.ToDate < filter.FromDate)
                 filter.ToDate = DateTime.UtcNow.Date;
-            (IEnumerable<Payment> payments, IEnumerable<MaintenanceRecord> maintenanceRecords) = await unitOfWork.StatisticsRepository.GetPaymentsAndMaintenanceRecords(filter.FromDate.Value, filter.ToDate.Value, cancellation);
+
+            (IEnumerable<Payment> payments, IEnumerable<MaintenanceRecord> maintenanceRecords) = await unitOfWork.StatisticsRepository.GetPaymentsAndMaintenanceRecords(
+                filter.FromDate.Value, 
+                filter.ToDate.Value, 
+                cancellation);
+
             return await AssignRevenueBreakdown(filter, payments, maintenanceRecords, cancellation);
         }
         private async Task<RevenueStatisticsDto> AssignRevenueBreakdown(StatisticsFilterDto filter, IEnumerable<Payment> payments, IEnumerable<MaintenanceRecord> maintenanceRecords, CancellationToken cancellationToken = default)
@@ -89,7 +111,9 @@ namespace MotorbikeRental.Application.Services.StatisticsServices
                 TotalMaintenanceCost = maintenanceRecords.Sum(m => m.Cost ?? 0),
                 TotalContracts = await unitOfWork.StatisticsRepository.GetTotalCount<RentalContract>(null, cancellationToken),
             };
+
             TimeSpan totalDate = filter.ToDate.Value - filter.FromDate.Value;
+
             if (totalDate.Days <= 60)
             {
                 revenueStatisticsDto.DailyRevenues = MapStatisticsToDailyRevenue(payments, maintenanceRecords, filter.FromDate.Value, filter.ToDate);
@@ -102,6 +126,7 @@ namespace MotorbikeRental.Application.Services.StatisticsServices
             {
                 revenueStatisticsDto.YearlyRevenues = MapStatisticsToYearlyRevenue(payments, maintenanceRecords, filter.FromDate.Value, filter.ToDate);
             }
+
             return revenueStatisticsDto;
         }
         public async Task<MonthlyHighlightDto> GetMonthlyHighlights(HighlightFilterDto filter, CancellationToken cancellationToken = default)
@@ -121,12 +146,14 @@ namespace MotorbikeRental.Application.Services.StatisticsServices
                 TopEmployees = topEmployees,
                 TopMotorbikes = topMotorbikes
             };
+
             return monthlyHighlightDto;
         }
         private (IEnumerable<TopEmployeeOfMonthDto>, IEnumerable<TopRentedMotorbikeDto>) MapEmployeesAndMotorbikesHighlight(List<Employee> employees, List<Motorbike> motorbikes)
         {
             List<TopEmployeeOfMonthDto> topEmployees = new List<TopEmployeeOfMonthDto>();
             List<TopRentedMotorbikeDto> topMotorbikes = new List<TopRentedMotorbikeDto>();
+
             for (int i = 0; i < employees.Count; i++)
             {
                 if (employees[i].RentalContracts.Count == 0)
@@ -153,17 +180,21 @@ namespace MotorbikeRental.Application.Services.StatisticsServices
                     RentalCount = motorbikes[i].RentalContracts.Count
                 });
             }
+
             return (topEmployees, topMotorbikes);
         }
         private IEnumerable<DailyRevenueDto> MapStatisticsToDailyRevenue(IEnumerable<Payment> payments, IEnumerable<MaintenanceRecord> maintenanceRecords, DateTime toDate, DateTime? endDate)
         {
             DateTime startDate = toDate.Date;
             DateTime endDateValue = endDate?.Date ?? DateTime.UtcNow.Date;
+
             List<DailyRevenueDto> dailyRevenues = new List<DailyRevenueDto>();
+
             for (DateTime date = startDate; date <= endDateValue; date = date.AddDays(1))
             {
                 decimal totalRevenue = payments.Where(p => p.PaymentDate.Date == date).Sum(p => p.Amount);
                 decimal totalMaintenanceCost = maintenanceRecords.Where(m => m.MaintenanceDate.Date == date).Sum(m => m.Cost ?? 0);
+
                 dailyRevenues.Add(new DailyRevenueDto
                 {
                     Date = date,
@@ -171,17 +202,21 @@ namespace MotorbikeRental.Application.Services.StatisticsServices
                     TotalMaintenanceCost = totalMaintenanceCost
                 });
             }
+
             return dailyRevenues;
         }
         private IEnumerable<MonthlyRevenueDto> MapStatisticsToMonthlyRevenue(IEnumerable<Payment> payments, IEnumerable<MaintenanceRecord> maintenanceRecords, DateTime toDate, DateTime? endDate)
         {
             DateTime starDate = toDate.Date;
             DateTime endDateValue = endDate?.Date ?? DateTime.UtcNow.Date;
+
             List<MonthlyRevenueDto> monthRevenueDto = new List<MonthlyRevenueDto>();
+
             for (DateTime date = starDate; date <= endDateValue.Date; date = date.AddMonths(1))
             {
                 decimal totalRevenue = payments.Where(p => p.PaymentDate.Year == date.Year && p.PaymentDate.Month == date.Month).Sum(p => p.Amount);
                 decimal totalMaintenanceCost = maintenanceRecords.Where(m => m.MaintenanceDate.Year == date.Year && m.MaintenanceDate.Month == date.Month).Sum(m => m.Cost ?? 0);
+
                 monthRevenueDto.Add(new MonthlyRevenueDto
                 {
                     Year = date.Year,
@@ -190,17 +225,21 @@ namespace MotorbikeRental.Application.Services.StatisticsServices
                     TotalMaintenanceCost = totalMaintenanceCost
                 });
             }
+
             return monthRevenueDto;
         }
         private IEnumerable<YearlyRevenueDto> MapStatisticsToYearlyRevenue(IEnumerable<Payment> payments, IEnumerable<MaintenanceRecord> maintenanceRecords, DateTime toDate, DateTime? endDate)
         {
             DateTime starDate = toDate.Date;
             DateTime endDateValue = endDate?.Date ?? DateTime.UtcNow.Date;
+
             List<YearlyRevenueDto> yearlyRevenueDtos = new List<YearlyRevenueDto>();
+
             for (DateTime date = starDate; date <= endDateValue.Date; date = date.AddYears(1))
             {
                 decimal totalRevenue = payments.Where(p => p.PaymentDate.Year == date.Year).Sum(p => p.Amount);
                 decimal totalMaintenanceCost = maintenanceRecords.Where(m => m.MaintenanceDate.Year == date.Year).Sum(m => m.Cost ?? 0);
+
                 yearlyRevenueDtos.Add(new YearlyRevenueDto
                 {
                     Year = date.Year,
@@ -213,7 +252,9 @@ namespace MotorbikeRental.Application.Services.StatisticsServices
         private decimal CalculateTotalSalary(IEnumerable<Employee> employees)
         {
             decimal totalSalary = 0;
+
             List<Employee> employeeList = employees.ToList();
+
             for (int i = 0; i < employees.Count(); i++)
             {
                 int totalMonths = ((DateTime.UtcNow.Year - employeeList[i].StartDate.Year) * 12) + (DateTime.UtcNow.Month - employeeList[i].StartDate.Month);

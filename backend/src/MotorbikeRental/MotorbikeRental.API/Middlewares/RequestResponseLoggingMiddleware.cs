@@ -18,26 +18,32 @@ namespace MotorbikeRental.Web.Middlewares
         public async Task Invoke(HttpContext context)
         {
             LogRequest(context.Request);
+
             await next(context);
+
             LogResponse(context.Response);
         }
         private void LogRequest(HttpRequest request)
         {
             logger.LogInformation($"Request received: {request.Method} {request.Path}");
+
             logger.LogInformation($"Request headers: {GetHeadersAsString(request.Headers)}");
         }
         private void LogResponse(HttpResponse response)
         {
             logger.LogInformation($"Response sent: {response.StatusCode}");
+
             logger.LogInformation($"Response headers: {GetHeadersAsString(response.Headers)}");
         }
         private string GetHeadersAsString(IHeaderDictionary headers)
         {
             StringBuilder stringBuilder = new StringBuilder();
+
             foreach (var (key, value) in headers)
             {
                 stringBuilder.AppendLine($"{key}: {value}");
             }
+
             return stringBuilder.ToString();
         }
     }

@@ -26,12 +26,14 @@ namespace MotorbikeRental.API.Controllers
         public async Task<IActionResult> CreateCustomer([FromBody] CustomerCreateDto customerCreateDto, CancellationToken cancellationToken = default)
         {
             var result = await customerService.CreateCustomer(customerCreateDto, cancellationToken);
+
             var response = new ResponseDto<CustomerDto>
             {
                 Success = true,
                 Message = "Customer created successfully",
                 Data = result
             };
+
             return CreatedAtAction(nameof(GetCustomerById), new { id = result.CustomerId }, response);
         }
         [Authorize(Roles = "Manager,Receptionist")]
@@ -39,6 +41,7 @@ namespace MotorbikeRental.API.Controllers
         public async Task<IActionResult> GetCustomerById(int id, CancellationToken cancellationToken = default)
         {
             var result = new CustomerDto();
+
             if(memoryCache.TryGetValue($"Customer_{id}", out CustomerDto? customer))
             {
                 result = customer;
@@ -46,15 +49,18 @@ namespace MotorbikeRental.API.Controllers
             else
             {
                 result = await customerService.GetCustomerById(id, cancellationToken);
+
                 if(result != null)
                     memoryCache.Set($"Customer_{id}", result, TimeSpan.FromMinutes(10));
             }
+
             var response = new ResponseDto<CustomerDto>
             {
                 Success = true,
                 Message = "Customer retrieved successfully",
                 Data = result
             };
+
             return Ok(response);
         }
         [Authorize(Roles = "Manager")]
@@ -69,14 +75,18 @@ namespace MotorbikeRental.API.Controllers
                     Message = "Customer ID in the request body does not match the ID in the URL."
                 });
             }
+
             var result = await customerService.UpdateCustomer(customerUpdateDto, cancellationToken);
+
             memoryCache.Remove($"Customer_{id}");
+
             var response = new ResponseDto<CustomerDto>
             {
                 Success = true,
                 Message = "Customer updated successfully",
                 Data = result
             };
+
             return Ok(response);
         }
         [Authorize(Roles = "Manager,Receptionist")]
@@ -84,12 +94,14 @@ namespace MotorbikeRental.API.Controllers
         public async Task<IActionResult> GetCustomerByFilter([FromQuery] CustomerFilterDto? filterDto, CancellationToken cancellationToken = default)
         {
             var result = await customerService.GetCustomerByFilter(filterDto, cancellationToken);
+
             var response = new ResponseDto<PaginatedDataDto<CustomerListDto>>
             {
                 Success = true,
                 Message = "Customers retrieved successfully",
                 Data = result
             };
+
             return Ok(response);
         }
         [Authorize(Roles = "Manager")]
@@ -97,12 +109,15 @@ namespace MotorbikeRental.API.Controllers
         public async Task<IActionResult> DeleteCustomer(int id, CancellationToken cancellationToken = default)
         {
             var result = await customerService.DeleteCustomer(id, cancellationToken);
+
             memoryCache.Remove($"Customer_{id}");
+
             var response = new ResponseDto
             {
                 Success = true,
                 Message = "Customer deleted successfully"
             };
+
             return Ok(response);
         }
     }

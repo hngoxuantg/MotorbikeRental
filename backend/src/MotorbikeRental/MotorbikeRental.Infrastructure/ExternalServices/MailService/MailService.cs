@@ -21,6 +21,7 @@ namespace MotorbikeRental.Infrastructure.ExternalServices.MailService
         {
             MailAddress mailAddress = new MailAddress(fromEmail);
             MailAddress toAddress = new MailAddress(emailDto.To);
+
             SmtpClient smptClient = new SmtpClient()
             {
                 Host = "smtp.gmail.com",
@@ -31,6 +32,7 @@ namespace MotorbikeRental.Infrastructure.ExternalServices.MailService
                 Credentials = new NetworkCredential(mailAddress.Address, password),
                 Timeout = 20000
             };
+
             using var message = new MailMessage(mailAddress, toAddress)
             {
                 Subject = "Thông báo tài khoản nhân viên",

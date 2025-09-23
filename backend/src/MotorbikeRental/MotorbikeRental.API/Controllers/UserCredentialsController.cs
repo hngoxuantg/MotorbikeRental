@@ -31,18 +31,22 @@ namespace MotorbikeRental.API.Controllers
                     Success = false,
                     Message = "Employee ID in the request body does not match the ID in the URL."
                 });
+
             var result = await userCredentialsService.CreateUserCredentials(userCredentialsCreateDto, cancellationToken);
+
             var response = new ResponseDto
             {
                 Success = true,
                 Message = "User credentials created successfully",
             };
+
             return CreatedAtAction(nameof(GetUserCredentials), new { id }, response);
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUserCredentials(int id, CancellationToken cancellation = default)
         {
             var result = new UserCredentialsDto();
+
             if (memoryCache.TryGetValue($"UserCredentials_{id}", out UserCredentialsDto? userCredentials))
             {
                 result = userCredentials;
@@ -53,12 +57,14 @@ namespace MotorbikeRental.API.Controllers
                 if (result != null)
                     memoryCache.Set($"UserCredentials_{id}", result, TimeSpan.FromMinutes(10));
             }
+
             var response = new ResponseDto<UserCredentialsDto>
             {
                 Success = true,
                 Message = "User credentials retrieved successfully",
                 Data = result
             };
+
             return Ok(response);
         }
         [HttpPut("{id}")]
@@ -71,13 +77,17 @@ namespace MotorbikeRental.API.Controllers
                     Success = false,
                     Message = "Employee ID in the request body does not match the ID in the URL."
                 });
+
             await userCredentialsService.UpdateUserCredentialsByAdmin(userCredentialsUpdateDto, cancellationToken);
+
             memoryCache.Remove($"UserCredentials_{id}");
+
             var response = new ResponseDto
             {
                 Success = true,
                 Message = "User credentials update successfully"
             };
+
             return Ok(response);
         }
         [HttpPost("{id}/reset-email")]
@@ -92,14 +102,18 @@ namespace MotorbikeRental.API.Controllers
                     Message = "Employee ID in the request body does not match the ID in the URL."
                 });
             }
+
             var result = await userCredentialsService.ResetEmail(resetEmailDto, cancellationToken);
+
             memoryCache.Remove($"UserCredentials_{id}");
             memoryCache.Remove($"Employee_{id}");
+
             var response = new ResponseDto
             {
                 Success = true,
                 Message = "Email reset successfully",
             };
+
             return Ok(response);
         }
         [HttpPost("{id}/reset-password")]
@@ -114,14 +128,18 @@ namespace MotorbikeRental.API.Controllers
                     Message = "Employee ID in the request body does not match the ID in the URL."
                 });
             }
+
             var result = await userCredentialsService.ResetPasswordByAdmin(resetPasswordDto, cancellationToken);
+
             memoryCache.Remove($"UserCredentials_{id}");
             memoryCache.Remove($"Employee_{id}"); 
+
             var response = new ResponseDto
             {
                 Success = true,
                 Message = "Password reset successfully",
             };
+
             return Ok(response);
         }
         [HttpPost("{id}/reset-phone-number")]
@@ -136,13 +154,17 @@ namespace MotorbikeRental.API.Controllers
                     Message = "Employee ID in the request body does not match the ID in the URL."
                 });
             }
+
             var result = await userCredentialsService.ResetPhoneNumber(resetPhoneNumberDto, cancellationToken);
+
             memoryCache.Remove($"UserCredentials_{id}");
+
             var response = new ResponseDto
             {
                 Success = true,
                 Message = "Phone number reset successfully",
             };
+
             return Ok(response);
         }
         [HttpPost("{id}/reset-user-name")]
@@ -157,14 +179,18 @@ namespace MotorbikeRental.API.Controllers
                     Message = "Employee ID in the request body does not match the ID in the URL."
                 });
             }
+
             var result = await userCredentialsService.ResetUserName(resetUserNameDto, cancellationToken);
+
             memoryCache.Remove($"UserCredentials_{id}");
             memoryCache.Remove($"Employee_{id}"); 
+
             var response = new ResponseDto
             {
                 Success = true,
                 Message = "Username reset successfully",
             };
+
             return Ok(response);
         }
         [HttpPost("{id}/reset-role")]
@@ -179,14 +205,18 @@ namespace MotorbikeRental.API.Controllers
                     Message = "Employee ID in the request body does not match the ID in the URL."
                 });
             }
+
             var result = await userCredentialsService.ResetRoleByAdmin(resetRoleDto, cancellationToken);
+
             memoryCache.Remove($"UserCredentials_{id}");
             memoryCache.Remove($"Employee_{id}"); 
+
             var response = new ResponseDto
             {
                 Success = true,
                 Message = "Role reset successfully",
             };
+
             return Ok(response);
         }
         [HttpDelete("{id}")]
@@ -194,13 +224,16 @@ namespace MotorbikeRental.API.Controllers
         public async Task<IActionResult> DeleteUserCredentials(int id, CancellationToken cancellationToken = default)
         {
             await userCredentialsService.DeleteUserCredentialsByAdmin(id, cancellationToken);
+
             memoryCache.Remove($"UserCredentials_{id}");
             memoryCache.Remove($"Employee_{id}"); 
+
             var response = new ResponseDto
             {
                 Success = true,
                 Message = "User credentials deleted successfully",
             };
+
             return Ok(response);
         }
     }

@@ -17,6 +17,7 @@ namespace MotorbikeRental.Application.Validators.VehicleValidators
         public async Task<bool> ValidateForCreate(MotorbikeCreateDto motorbikeCreateDto, CancellationToken cancellationToken = default)
         {
             List<string> errors = new List<string>();
+
             if (!await unitOfWork.CategoryRepository.IsExists(nameof(Category.CategoryId), motorbikeCreateDto.CategoryId, cancellationToken))
                 errors.Add("Category not found");
             if (await unitOfWork.MotorbikeRepository.IsExists(nameof(Motorbike.LicensePlate), motorbikeCreateDto.LicensePlate, cancellationToken))
@@ -25,8 +26,10 @@ namespace MotorbikeRental.Application.Validators.VehicleValidators
                 errors.Add("Chassis number already exists");
             if (await unitOfWork.MotorbikeRepository.IsExists(nameof(Motorbike.EngineNumber), motorbikeCreateDto.EngineNumber, cancellationToken))
                 errors.Add("Engine number already exists");
+
             if (errors.Any())
                 throw new ValidatorException(string.Join("; ", errors));
+
             return true;
         }
 
@@ -34,12 +37,14 @@ namespace MotorbikeRental.Application.Validators.VehicleValidators
         {
             if (motorbike.Status == MotorbikeStatus.Rented)
                 throw new ValidatorException("This motorbike is currently rented and cannot be deleted.");
+
             return true;
         }
 
         public async Task<bool> ValidateForUpdate(MotorbikeUpdateDto motorbikeUpdateDto, CancellationToken cancellationToken = default)
         {
             List<string> errors = new List<string>();
+
             if (!await unitOfWork.MotorbikeRepository.IsExists(nameof(Motorbike.MotorbikeId), motorbikeUpdateDto.MotorbikeId, cancellationToken))
                 throw new NotFoundException("MotorBike not found");
             if (!await unitOfWork.CategoryRepository.IsExists(nameof(Category.CategoryId), motorbikeUpdateDto.CategoryId, cancellationToken))
@@ -50,8 +55,10 @@ namespace MotorbikeRental.Application.Validators.VehicleValidators
                 errors.Add("Chassis number already exists");
             if (await unitOfWork.MotorbikeRepository.IsExistsForUpdate(motorbikeUpdateDto.MotorbikeId, nameof(Motorbike.EngineNumber), motorbikeUpdateDto.EngineNumber, nameof(Motorbike.MotorbikeId), cancellationToken))
                 errors.Add("Engine number already exists");
+
             if (errors.Any())
                 throw new ValidatorException(string.Join("; ", errors));
+
             return true;
         }
     }

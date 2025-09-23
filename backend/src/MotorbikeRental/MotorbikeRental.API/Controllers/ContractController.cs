@@ -23,12 +23,14 @@ namespace MotorbikeRental.API.Controllers
         public async Task<IActionResult> CalculateRentalPrice([FromBody] RentalPriceRequestDto priceRequestDto, CancellationToken cancellationToken = default)
         {
             var result = await contractService.CalculateRentalPrice(priceRequestDto, cancellationToken);
+
             var response = new ResponseDto<RentalPriceResponseDto>
             {
                 Success = true,
                 Message = "Rental price calculated successfully",
                 Data = result
             };
+
             return Ok(response);
         }
         [Authorize(Roles = "Receptionist")]
@@ -36,12 +38,14 @@ namespace MotorbikeRental.API.Controllers
         public async Task<IActionResult> CreateContract([FromBody] ContractCreateDto contractCreate, CancellationToken cancellation = default)
         {
             var result = await contractService.CreateContract(contractCreate, cancellation);
+
             var response = new ResponseDto<ContractDto>
             {
                 Success = true,
                 Message = "Contract created successfully",
                 Data = result
             };
+
             return Ok(response);
         }
         [Authorize(Roles = "Receptionist")]
@@ -49,11 +53,13 @@ namespace MotorbikeRental.API.Controllers
         public async Task<IActionResult> UpdateContractStatusActive(int id, CancellationToken cancellation = default)
         {
             await contractService.UpdateContractStatusActive(id, cancellation);
+
             var response = new ResponseDto
             {
                 Success = true,
                 Message = "Contract status updated to active successfully"
             };
+
             return Ok(response);
         }
         [Authorize(Roles = "Receptionist")]
@@ -61,11 +67,13 @@ namespace MotorbikeRental.API.Controllers
         public async Task<IActionResult> CancelContractByCustomer(int id, CancellationToken cancellation = default)
         {
             await contractService.CancelContractByCustomer(id, cancellation);
+
             var response = new ResponseDto
             {
                 Success = true,
                 Message = "Contract completed successfully after return"
             };
+
             return Ok(response);
         }
         [Authorize(Roles = "Receptionist")]
@@ -74,13 +82,16 @@ namespace MotorbikeRental.API.Controllers
         {
             if (id != contractUpdate.ContractId)
                 return BadRequest("Contract ID mismatch");
+
             var result = await contractService.UpdateContractBeforeActivation(contractUpdate, cancellation);
+
             var response = new ResponseDto<ContractDto>
             {
                 Success = true,
                 Message = "Contract updated before activation successfully",
                 Data = result
             };
+
             return Ok(response);
         }
         [Authorize(Roles = "Manager, Receptionist")]
@@ -88,12 +99,14 @@ namespace MotorbikeRental.API.Controllers
         public async Task<IActionResult> GetContract(int id, CancellationToken cancellation = default)
         {
             var result = await contractService.GetContractById(id, cancellation);
+
             var response = new ResponseDto<ContractDto>
             {
                 Success = true,
                 Message = "Contract retrieved successfully",
                 Data = result
             };
+
             return Ok(response);
         }
         [Authorize(Roles = "Manager")]
@@ -101,11 +114,13 @@ namespace MotorbikeRental.API.Controllers
         public async Task<IActionResult> DeleteContract(int id, CancellationToken cancellation = default)
         {
             await contractService.DeleteContract(id, cancellation);
+
             var response = new ResponseDto
             {
                 Success = true,
                 Message = "Contract deleted successfully"
             };
+
             return Ok(response);
         }
         [Authorize(Roles = "Receptionist")]
@@ -114,13 +129,16 @@ namespace MotorbikeRental.API.Controllers
         {
             if (id != contractSettlementDto.ContractId)
                 return BadRequest("Contract ID mismatch");
+
             var result = await contractService.ContractSettlement(contractSettlementDto, cancellation);
+
             var response = new ResponseDto<ContractDto>
             {
                 Success = true,
                 Message = "Contract settlement processed successfully",
                 Data = result
             };
+
             return Ok(response);
         }
         [Authorize(Roles = "Manager, Receptionist")]
@@ -128,12 +146,14 @@ namespace MotorbikeRental.API.Controllers
         public async Task<IActionResult> GetContractsByFilter([FromQuery] ContractFilterDto contractFilterDto, CancellationToken cancellation = default)
         {
             var result = await contractService.GetContractFilter(contractFilterDto, cancellation);
+
             var response = new ResponseDto<PaginatedDataDto<ContractListDto>>
             {
                 Success = true,
                 Message = "Contracts retrieved successfully",
                 Data = result
             };
+
             return Ok(response);
         }
     }

@@ -17,19 +17,24 @@ namespace MotorbikeRental.Infrastructure.ExternalServices.StorageService
         {
             if (!IsValidImage(formFile))
                 throw new Exception("File is invalid or empty.");
+
             string folderPath = Path.Combine(baseDirectory, folder);
             string fileName = $"{Guid.NewGuid()}{Path.GetExtension(formFile.FileName)}";
             string filePath = Path.Combine(folderPath, fileName);
+
             Directory.CreateDirectory(folderPath);
+
             using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
             {
                 await formFile.CopyToAsync(fileStream, cancellationToken);
             }
+
             return Path.Combine("/uploads",folder, fileName).Replace("\\", "/");
         }
         public async Task<List<string>> SaveImages(IList<IFormFile> formFiles, string folder, CancellationToken cancellationToken = default)
         {
             List<string> filePaths = new List<string>();
+
             for (int i = 0; i < formFiles.Count; i++)
             {
                 if (IsValidImage(formFiles[i]))
@@ -37,6 +42,7 @@ namespace MotorbikeRental.Infrastructure.ExternalServices.StorageService
                     filePaths.Add(await SaveImage(formFiles[i], folder, cancellationToken));
                 }
             }
+
             return filePaths;
         }
         public bool IsValidImage(IFormFile formFile)
@@ -45,17 +51,22 @@ namespace MotorbikeRental.Infrastructure.ExternalServices.StorageService
                 return false;
             if (formFile.Length > maxFileSize)
                 return false;
+
             string extension = Path.GetExtension(formFile.FileName).ToLowerInvariant();
+
             return allowedExtensions.Contains(extension);
         }
         public bool DeleteFile(string filePath)
         {
             string relativePath = filePath.TrimStart('/', '\\');
+
             if (relativePath.StartsWith("uploads", StringComparison.OrdinalIgnoreCase))
             {
                 relativePath = relativePath.Substring("uploads".Length).TrimStart('/', '\\');
             }
+
             string fullPath = Path.Combine(baseDirectory, relativePath);
+
             if (File.Exists(fullPath))
             {
                 try
@@ -77,11 +88,13 @@ namespace MotorbikeRental.Infrastructure.ExternalServices.StorageService
         public bool DeleteFiles(IList<string> filePaths)
         {
             bool allDeleted = true;
+
             for (int i = 0; i < filePaths.Count; i++)
             {
                 if (!DeleteFile(filePaths[i]))
                     allDeleted = false;
             }
+
             return allDeleted;
         }
         public string GetFileUrl(string relativePath)

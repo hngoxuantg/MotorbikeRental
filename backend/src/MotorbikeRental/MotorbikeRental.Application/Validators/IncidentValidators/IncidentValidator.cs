@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using MotorbikeRental.Application.DTOs.Incident;
 using MotorbikeRental.Application.Exceptions;
 using MotorbikeRental.Application.Interface.IValidators.IIncidentValidators;
@@ -6,8 +5,6 @@ using MotorbikeRental.Domain.Entities.Contract;
 using MotorbikeRental.Domain.Entities.Incidents;
 using MotorbikeRental.Domain.Enums.ContractEnum;
 using MotorbikeRental.Domain.Interfaces.IRepositories;
-using MotorbikeRental.Domain.Interfaces.IRepositories.IContractRepositories;
-using MotorbikeRental.Domain.Interfaces.IRepositories.IIncidents;
 
 namespace MotorbikeRental.Application.Validators.IncidentValidators
 {
@@ -30,6 +27,7 @@ namespace MotorbikeRental.Application.Validators.IncidentValidators
                 throw new BusinessRuleException("Resolved date cannot be before incident date");
             if (incidentCreateDto.ResolvedDate.HasValue && incidentCreateDto.ResolvedDate.Value > DateTime.UtcNow)
                 throw new BusinessRuleException("Resolved date cannot be in the future");
+
             return true;
         }
         public async Task<bool> ValidateForUpdateBeforeActivation(IncidentUpdateBeforeCompleteDto incidentUpdateBeforeCompleteDto, RentalContract rentalContract, CancellationToken cancellationToken = default)
@@ -44,6 +42,7 @@ namespace MotorbikeRental.Application.Validators.IncidentValidators
                 throw new BusinessRuleException("Resolved date cannot be before incident date");
             if (incidentUpdateBeforeCompleteDto.ResolvedDate.HasValue && incidentUpdateBeforeCompleteDto.ResolvedDate.Value > DateTime.UtcNow.Date)
                 throw new BusinessRuleException("Resolved date cannot be in the future");
+
             return true;
         }
         public bool ValidateForCompleteIncident(Incident incident, RentalContract rentalContract, IncidentCompleteDto incidentCompleteDto)
@@ -54,6 +53,7 @@ namespace MotorbikeRental.Application.Validators.IncidentValidators
                 throw new BusinessRuleException("Resolved date cannot be before incident date");
             if (rentalContract.RentalContractStatus != RentalContractStatus.Completed)
                 throw new BusinessRuleException("Cannot complete incident for a contract that is not completed");
+
             return true;
         }
     }

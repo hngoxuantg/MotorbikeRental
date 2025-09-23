@@ -16,6 +16,7 @@ namespace MotorbikeRental.Application.Validators.UserValidators
             if (employeeUpdateDto.DateOfBirth > DateTime.UtcNow) throw new ValidatorException("Date of birth cannot be in the future");
             if (employeeUpdateDto.EmployeeId <= 0) throw new ValidatorException("Employee ID must be greater than zero");
             if (employeeUpdateDto.Salary < 0) throw new ValidatorException("Salary cannot be negative");
+
             return true;
         }
     }

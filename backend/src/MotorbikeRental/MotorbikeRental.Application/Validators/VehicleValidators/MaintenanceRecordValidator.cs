@@ -23,15 +23,21 @@ namespace MotorbikeRental.Application.Validators.VehicleValidators
                 throw new ValidatorException("Maintenance date cannot be in the past.");
             if (!await employeeRepository.IsExists("EmployeeId", maintenanceRecordCreateDto.EmployeeId, cancellationToken))
                 throw new NotFoundException($"Employee with ID {maintenanceRecordCreateDto.EmployeeId} not found.");
+
             return true;
         }
         public bool ValidateForComplete(MaintenanceRecord maintenanceRecord, MaintenanceCompletionDto maintenanceCompletionDto)
         {
             List<string> errors = new List<string>();
+
             if(maintenanceRecord.IsCompleted)
                 errors.Add("Maintenance record is already completed.");
             if(maintenanceCompletionDto.NextMaintenanceDate <= maintenanceRecord.MaintenanceDate)
                 errors.Add("Next maintenance date must be after the current maintenance date.");
+
+            if(errors.Any())
+                throw new ValidatorException(string.Join("; ", errors));
+
             return true;
         }
     }

@@ -16,6 +16,7 @@ namespace MotorbikeRental.Application.Validators.ContractValidators
                 throw new BusinessRuleException("Contract has already been paid.");
             if (rentalContract.RentalContractStatus != RentalContractStatus.Completed)
                 throw new BusinessRuleException("Contract must be completed before processing payment.");
+
             return true;
         }
     }

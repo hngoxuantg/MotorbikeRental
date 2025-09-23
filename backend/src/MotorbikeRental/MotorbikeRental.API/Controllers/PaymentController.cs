@@ -26,12 +26,14 @@ namespace MotorbikeRental.API.Controllers
         public async Task<IActionResult> PreviewPayment(int id, CancellationToken cancellationToken = default)
         {
             var result = await paymentService.PreviewPayment(id, cancellationToken);
+
             var response = new ResponseDto<PaymentPreviewDto>
             {
                 Success = true,
                 Message = "Payment preview retrieved successfully",
                 Data = result
             };
+
             return Ok(response);
         }
 
@@ -41,12 +43,14 @@ namespace MotorbikeRental.API.Controllers
             CancellationToken cancellationToken = default)
         {
             var result = await paymentService.ProcessPayment(paymentProcessDto, cancellationToken);
+
             var response = new ResponseDto<PaymentDto>
             {
                 Success = true,
                 Message = "Payment processed successfully",
                 Data = result
             };
+
             return Ok(response);
         }
 
@@ -55,12 +59,14 @@ namespace MotorbikeRental.API.Controllers
         public async Task<IActionResult> GetByContractId(int id, CancellationToken cancellationToken = default)
         {
             var result = await paymentService.GetById(id, cancellationToken);
+
             var response = new ResponseDto<PaymentDto>()
             {
                 Success = true,
                 Message = "Payment retrieved successfully",
                 Data = result
             };
+
             return Ok(response);
         }
     }

@@ -30,9 +30,11 @@ namespace MotorbikeRental.Web.Middlewares
             int statusCode;
             string errorCode = "UNKNOWN";
             string errorType = ex.GetType().Name;
+
             if (ex is BaseCustomException)
             {
                 BaseCustomException baseCustomException = (BaseCustomException)ex;
+
                 message = baseCustomException.Message;
                 statusCode = (int)baseCustomException.HttpStatusCode;
                 errorCode = baseCustomException.ErrorCode;
@@ -43,9 +45,15 @@ namespace MotorbikeRental.Web.Middlewares
                 message = ErrorMessages.SystemError;
                 statusCode = 500;
             }
-            logger.LogError(ex, "Error occurred. StatusCode: {StatusCode}, ErrorCode: {ErrorCode}, ErrorType: {ErrorType}, Message: {Message}", statusCode, errorCode, errorType, message);
+            logger.LogError(ex, "Error occurred. StatusCode: {StatusCode}, ErrorCode: {ErrorCode}, ErrorType: {ErrorType}, Message: {Message}", 
+                statusCode, 
+                errorCode, 
+                errorType, 
+                message);
+
             context.Response.StatusCode = statusCode;
             context.Response.ContentType = "application/json";
+
             var response = new
             {
                 Success = false,
@@ -56,6 +64,7 @@ namespace MotorbikeRental.Web.Middlewares
                     Type = errorType
                 }
             };
+
             var json = JsonSerializer.Serialize(response);
             await context.Response.WriteAsync(json);
         }

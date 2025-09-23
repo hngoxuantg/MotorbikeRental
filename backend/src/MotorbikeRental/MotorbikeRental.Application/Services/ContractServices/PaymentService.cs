@@ -47,12 +47,18 @@ namespace MotorbikeRental.Application.Services.ContractServices
                     ) ?? throw new NotFoundException("Contract not found");
 
                 paymentValidator.ValidateForProcessPayment(rentalContract, paymentProcessDto);
+
                 Payment? payment = MapToPayment(paymentProcessDto, rentalContract, rentalContract.Incident, CalculateTotalAmount(rentalContract, rentalContract.Incident));
+
                 rentalContract.IsPaid = true;
+
                 unitOfWork.RentalContractRepository.UpdateEntity(rentalContract);
+
                 unitOfWork.PaymentRepository.AddEntity(payment);
+
                 await unitOfWork.SaveChangesAsync(cancellationToken);
                 await unitOfWork.CommitTransactionAsync(cancellationToken);
+
                 return MapToPaymentDto(payment, rentalContract);
             }
             catch (Exception ex)
@@ -82,6 +88,7 @@ namespace MotorbikeRental.Application.Services.ContractServices
         {
             Payment payment = await unitOfWork.PaymentRepository.GetWithIncludes(contractId, cancellationToken)
                 ?? throw new NotFoundException("Contract not found");
+
             return MapToPaymentDto(payment, payment.RentalContract);
         }
         private Payment MapToPayment(PaymentProcessDto paymentProcessDto, RentalContract rentalContract, Incident? incident, decimal totalAmount)
