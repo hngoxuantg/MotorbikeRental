@@ -1,5 +1,6 @@
 <script setup>
 import { useRouter } from 'vue-router'
+import { API_URL } from '@/config/env'
 
 const router = useRouter()
 
@@ -84,7 +85,7 @@ function getStatusClass(status) {
       <div class="image-section">
         <img
           v-if="motorbike.imageUrl"
-          :src="motorbike.imageUrl.startsWith('/') ? 'http://localhost:8080' + motorbike.imageUrl : motorbike.imageUrl"
+          :src="motorbike.imageUrl.startsWith('/') ? API_URL + motorbike.imageUrl : motorbike.imageUrl"
           :alt="motorbike.motorbikeName"
           class="motorbike-image"
         />
